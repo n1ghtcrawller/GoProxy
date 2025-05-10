@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     BOT_TOKEN: str
     HOST: str
+    SS_STATIC_PASSWORD: str
+    SS_STATIC_PORT: int
 
     class Config:
         env_file = ".env"
