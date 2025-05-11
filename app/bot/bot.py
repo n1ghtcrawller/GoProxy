@@ -24,7 +24,7 @@ async def start_bot():
         raise
 
 @dp.message(CommandStart())
-async def command_start_handler(message: Message, chat_id) -> None:
+async def command_start_handler(message: Message) -> None:
     try:
         await message.answer("Добро пожаловать")
         bot_logger.info(f"Запущен бот пользователем {message.from_user}")

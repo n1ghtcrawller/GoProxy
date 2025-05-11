@@ -6,7 +6,8 @@ class UserBase(BaseModel):
     username: str
     first_name: Optional[str]
     last_name: Optional[str]
-    photo_url: Optional[HttpUrl]
+    photo_url: Optional[str]
 
     class Config:
         from_attributes = True
+
