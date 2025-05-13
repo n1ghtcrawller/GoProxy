@@ -2,7 +2,7 @@ from sqlalchemy import String, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 from typing import Optional, List
-
+from app.models.ss_link import SSLink
 class User(Base):
     __tablename__ = "users"
 
