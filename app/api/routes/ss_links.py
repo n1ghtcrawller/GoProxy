@@ -23,34 +23,14 @@ async def generate_ss_link(
     user = await get_current_user(user_id, session)
 
     generator = SSGenerator(session)
-    ss_link = await generator.create_link(
-        user=user,
-        password=settings.SS_STATIC_PASSWORD,
-        port=settings.SS_STATIC_PORT
-    )
-
-    url = ss_link.generate_ss_url(settings.HOST)
-
-    return SSLinkBase(
-        id=ss_link.id,
-        user_id=ss_link.user_id,
-        method=ss_link.method,
-        port=ss_link.port,
-        url=url
-    )
-
+    ss_link = await generator.create_access_key()
+    return ss_link
 
 @router.get("/me", response_model=list[SSLinkBase])
-async def list_my_links(
+async def users_link(
     user_id: int,
     session: AsyncSession = Depends(get_async_session)
 ):
     user = await get_current_user(user_id, session)
     links = user.ss_links
-    return [SSLinkBase(
-        id=l.id,
-        user_id=l.user_id,
-        method=l.method,
-        port=l.port,
-        url=l.generate_ss_url(settings.HOST)
-    ) for l in links]
+    return
