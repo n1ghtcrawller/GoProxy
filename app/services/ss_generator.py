@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 class SSGenerator:
     def __init__(self, db: AsyncSession):
         self.db = db
-        self.server_url = "https://host.docker.internal:8081"
+        self.server_url = "https://95.111.207.234:8081"
         self.api_base_url = f"{self.server_url}/TestApiPrefix"
 
     def _client(self) -> httpx.AsyncClient:
@@ -14,7 +14,7 @@ class SSGenerator:
 
     async def test_server(self) -> dict:
         async with self._client() as client:
-            url = "https://127.0.0.1:/8081/TestApiPrefix/server"
+            url = "https://95.111.207.234:8081/TestApiPrefix/server"
             response = await client.get(url)
             response.raise_for_status()
             return response.json()
