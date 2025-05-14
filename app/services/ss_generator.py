@@ -19,13 +19,6 @@ class SSGenerator:
             response.raise_for_status()
             return response.json()
 
-    async def list_access_keys(self) -> list[dict]:
-        async with self._client() as client:
-            url = f"{self.api_base_url}/access-keys"
-            response = await client.get(url)
-            response.raise_for_status()
-            return response.json()
-
     async def create_access_key(self) -> dict:
         async with self._client() as client:
             url = f"{self.api_base_url}/access-keys"
