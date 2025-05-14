@@ -69,3 +69,30 @@ async def users_link(
         raise HTTPException(status_code=404, detail="Access key not found on remote server")
 
     return SSLinkBase(id=ss_data["id"], access_url=ss_data["accessUrl"])
+
+@router.delete("/me", status_code=204)
+async def delete_users_link(
+    user_id: int,
+    session: AsyncSession = Depends(get_async_session)
+):
+    user = await get_current_user(user_id, session)
+
+    result = await session.execute(
+        select(SSLink).where(SSLink.user_id == user.user_id).order_by(SSLink.id.desc())
+    )
+    link = result.scalars().first()
+
+    if not link:
+        raise HTTPException(status_code=404, detail="Access link not found for this user")
+
+    generator = SSGenerator(session)
+
+    deleted = await generator.delete_access_key(link.key_id)
+
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Access key not found on remote server")
+
+    await session.delete(link)
+    await session.commit()
+
+    return
