@@ -14,7 +14,8 @@ class SSGenerator:
 
     async def list_access_keys(self) -> list[dict]:
         async with self._client() as client:
-            response = await client.get(self.api_base_url)
+            url = f"{self.api_base_url}/access-keys"
+            response = await client.get(url)
             response.raise_for_status()
             return response.json()
 
@@ -25,25 +26,25 @@ class SSGenerator:
             response.raise_for_status()
             return response.json()
 
-    async def get_access_key(self, key_id: int) -> Optional[dict]:
+    async def get_access_key(self, key_id: str) -> Optional[dict]:
         async with self._client() as client:
-            url = f"{self.api_base_url}/{key_id}"
+            url = f"{self.api_base_url}/access-keys/{key_id}"
             response = await client.get(url)
             if response.status_code == 404:
                 return None
             response.raise_for_status()
             return response.json()
 
-    async def rename_access_key(self, key_id: int, name: str) -> dict:
+    async def rename_access_key(self, key_id: str, name: str) -> dict:
         async with self._client() as client:
-            url = f"{self.api_base_url}/{key_id}/name"
+            url = f"{self.api_base_url}/access-keys/{key_id}/name"
             response = await client.put(url, json={"name": name})
             response.raise_for_status()
             return response.json()
 
-    async def delete_access_key(self, key_id: int) -> bool:
+    async def delete_access_key(self, key_id: str) -> bool:
         async with self._client() as client:
-            url = f"{self.api_base_url}/{key_id}"
+            url = f"{self.api_base_url}/access-keys/{key_id}"
             response = await client.delete(url)
             return response.status_code == 204
 
