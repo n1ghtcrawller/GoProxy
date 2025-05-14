@@ -26,6 +26,12 @@ async def generate_ss_link(
     ss_link = await generator.create_access_key()
     return ss_link
 
+@router.get("test")
+async def test_ss_server(session: AsyncSession = Depends(get_async_session)):
+    generator = SSGenerator(session)
+    response = await generator.test_server()
+    return response
+
 @router.get("/me", response_model=list[SSLinkBase])
 async def users_link(
     user_id: int,
