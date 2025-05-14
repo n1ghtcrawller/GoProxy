@@ -46,11 +46,26 @@ async def test_ss_server(session: AsyncSession = Depends(get_async_session)):
     response = await generator.test_server()
     return response
 
-@router.get("/me", response_model=list[SSLinkBase])
+from sqlalchemy.future import select
+from fastapi import HTTPException
+
+@router.get("/me", response_model=SSLinkBase)
 async def users_link(
     user_id: int,
     session: AsyncSession = Depends(get_async_session)
 ):
     user = await get_current_user(user_id, session)
-    links = user.ss_links
-    return
+
+    result = await session.execute(
+        select(SSLink).where(SSLink.user_id == user.user_id).order_by(SSLink.id.desc())
+    )
+    link = result.scalars().first()
+    if not link:
+        raise HTTPException(status_code=404, detail="Access link not found for this user")
+    generator = SSGenerator(session)
+    ss_data = await generator.get_access_key(link.key_id)
+
+    if not ss_data:
+        raise HTTPException(status_code=404, detail="Access key not found on remote server")
+
+    return SSLinkBase(id=ss_data["id"], access_url=ss_data["accessUrl"])
