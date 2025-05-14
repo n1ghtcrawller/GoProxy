@@ -13,5 +13,5 @@ class User(Base):
     photo_url: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
 
     ss_links: Mapped[List["SSLink"]] = relationship(
-        "SSLink", back_populates="user", cascade="all, delete-orphan"
+        "SSLink", back_populates="user", lazy="selectin", cascade="all, delete-orphan"
     )
