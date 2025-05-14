@@ -20,7 +20,7 @@ class SSGenerator:
 
     async def create_access_key(self) -> dict:
         async with self._client() as client:
-            url = f"{self.server_url}/access-keys"
+            url = f"{self.api_base_url}/access-keys"
             response = await client.post(url)
             response.raise_for_status()
             return response.json()
@@ -49,7 +49,7 @@ class SSGenerator:
 
     async def set_data_limit(self, bytes_limit: int) -> dict:
         async with self._client() as client:
-            url = f"{self.server_url}/server/access-key-data-limit"
+            url = f"{self.api_base_url}/server/access-key-data-limit"
             payload = {"limit": {"bytes": bytes_limit}}
             response = await client.put(url, json=payload)
             response.raise_for_status()
@@ -57,6 +57,6 @@ class SSGenerator:
 
     async def remove_data_limit(self) -> bool:
         async with self._client() as client:
-            url = f"{self.server_url}/server/access-key-data-limit"
+            url = f"{self.api_base_url}/server/access-key-data-limit"
             response = await client.delete(url)
             return response.status_code == 204
