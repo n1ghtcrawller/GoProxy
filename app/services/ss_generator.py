@@ -7,7 +7,7 @@ class SSGenerator:
     def __init__(self, db: AsyncSession):
         self.db = db
         self.server_url = "https://127.0.0.1:8081"
-        self.api_base_url = f"{self.server_url}/access-keys"
+        self.api_base_url = f"{self.server_url}/TestApiPrefix"
 
     def _client(self) -> httpx.AsyncClient:
         return httpx.AsyncClient(verify=False, timeout=10.0)
@@ -20,7 +20,8 @@ class SSGenerator:
 
     async def create_access_key(self) -> dict:
         async with self._client() as client:
-            response = await client.post(self.api_base_url)
+            url = f"{self.server_url}/access-keys"
+            response = await client.post(url)
             response.raise_for_status()
             return response.json()
 
