@@ -10,7 +10,7 @@ class SSGenerator:
         self.api_base_url = f"{self.server_url}/TestApiPrefix"
 
     def _client(self) -> httpx.AsyncClient:
-        return httpx.AsyncClient(verify=False, timeout=10.0)
+        return httpx.AsyncClient(verify=False)
 
     async def list_access_keys(self) -> list[dict]:
         async with self._client() as client:
